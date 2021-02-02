@@ -5,7 +5,7 @@ import Header from '../components/Header'
 import { differenceInHours, formatDistanceToNow } from 'date-fns';
 
 export async function getStaticProps() {
-  const res = await axios.get('https://hacker-news.firebaseio.com/v0/topstories.json?print=pretty');
+  const res = await axios.get('https://hacker-news.firebaseio.com/v0/showstories.json?print=pretty');
   const allData = res.data;
 
   const promises = allData.slice(0, 30).map(async function (story) {
@@ -103,7 +103,7 @@ export default function Index ({data}) {
 
   return (
     <div className={styles.container}>
-      <Header page="home"/>
+      <Header page="show"/>
       <div className={styles.wrapper}>
         <ul>
 

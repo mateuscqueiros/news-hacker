@@ -1,6 +1,8 @@
-import { format } from 'date-fns'
 import styles from '../styles/Home.module.css'
 import axios from 'axios'
+import { differenceInDays, differenceInMinutes, differenceInSeconds, format, parseISO } from 'date-fns';
+import Header from '../components/Header'
+import { differenceInHours, formatDistanceToNow } from 'date-fns';
 
 export async function getStaticProps() {
   const res = await axios.get('https://hacker-news.firebaseio.com/v0/beststories.json?print=pretty');
@@ -26,38 +28,88 @@ export async function getStaticProps() {
   }
 }
 
+function timeDistance(date) {
+
+  let stamp = date * 1000;
+  let now = new Date();
+  let value = null;
+
+  if (differenceInMinutes(now, stamp) > 59) {
+
+    if (differenceInHours(now, stamp) === 1) {
+
+      value = `${differenceInHours(now, stamp)} hour ago`
+
+    } else {
+
+      if (differenceInHours(now, stamp) > 23) {
+
+        if (differenceInDays(now, stamp) == 1) {
+
+          value = `${differenceInDays(now, stamp)} day ago`
+
+        } else {
+          value = `${differenceInDays(now, stamp)} days ago`
+        }
+
+
+      } else {
+
+        value = `${differenceInHours(now, stamp)} hours ago`
+        
+      }
+    }
+
+  } else if(differenceInMinutes(now, stamp) === -1) {
+
+    value = '1 minute ago'
+
+  } else {
+
+    value = `${differenceInMinutes(now, stamp)} minutes ago`
+
+  }
+
+  return value
+
+}
+
+function generateHNLinks(id, type, number) {
+
+  switch (type) {
+    case 'user':
+      let link = `https://news.ycombinator.com/user?id=${id}`
+      return (
+        <>
+          <a className={styles.hover} href={link}>{id}</a>
+        </>
+      )
+        
+    case 'comment':
+      let link2 = `https://news.ycombinator.com/item?id=${id}`
+      return (
+        <>
+          <span>{'\u00A0'} {'\u00A0'}|{'\u00A0'}{'\u00A0'}</span>
+          <a className={styles.hover} href={link2}>{number} comments</a>
+        </>
+      )
+    default: 
+      console.log('Pls specify something valuable')
+
+  }
+}
+
 export default function Index ({data}) {
 
+  console.log(data[0].kids.length !== false)
+
   return (
-    <div id={styles.best} className={styles.container}>
-      <header className={styles.header}>
-        <div className={styles.wrap_header}>
-          <div className={styles.logo}>
-            <img src="https://news.ycombinator.com/y18.gif" alt="Logo"/>
-            News Hacker
-          </div>
-          <nav className={styles.items}>
-            <ul>
-              <li>
-                <a href="/">Home</a>
-              </li>
-              <li>
-                <a href="/best">Best</a>
-              </li>
-              <li>
-                <a href="/new">New</a>
-              </li>
-            </ul>
-          </nav>
-        </div>
-      </header>
+    <div className={styles.container}>
+      <Header page="best"/>
       <div className={styles.wrapper}>
-        <p>Best stories from {format(new Date(), 'LLLL d, u')} (UTC)</p>
         <ul>
 
-          {
-
-            data.map((s, index) => {
+          {data.map((s, index) => {
 
               return (
                 <li key={index + 1} className={styles.wrap_news}>
@@ -69,9 +121,13 @@ export default function Index ({data}) {
                       <a href={s.url}>{s.title}</a>
                     </h2>
                     <div className={styles.subtext}>
-                      <span className={styles.points_author}>{s.score} points by {s.by}</span>
-                      |
-                      <span className={styles.time}>{format(s.time, 'H')} hours</span>
+                      <span className={styles.points_author}>{s.score} points by {generateHNLinks(s.by, 'user')}{'\u00A0'}{'\u00A0'}|{'\u00A0'}{'\u00A0'} </span>
+                      <span className={styles.time}>{`${timeDistance(s.time)}`}</span>
+                      <span className={styles.comments}>{
+
+                        s.kids ? generateHNLinks(s.id, 'comment', `${s.kids.length}`) : null
+
+                      }</span>
                     </div>
                   </div>
                   
@@ -85,15 +141,6 @@ export default function Index ({data}) {
           
         </ul>
       </div>
-      <ul>
-        {
-
-          // data.map(s => {
-          //   return <li>{s.title}</li>
-          // })
-
-        }
-      </ul>
     </div>
   )
 }

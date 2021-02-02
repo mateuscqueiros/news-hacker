@@ -1,0 +1,118 @@
+.header {
+    height: 50px;
+    background-color: #ff6600d2;
+}
+
+.wrap_header {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    max-width: 960px;
+    margin-right: auto;
+    margin-left: auto;
+    display: flex;
+}
+
+.header .logo {
+    margin-right: 2em;
+    margin-left: 1.3em;
+    color: #000000;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+}
+
+.header .logo img {
+    margin-right: 0.8em;
+    border: 1px solid white;
+}
+
+.header ul {
+    width: 300px;
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+    margin: 0;
+    padding: 0;
+}
+
+.header ul li {
+    list-style: none;
+}
+
+.header .close {
+    display: none;
+}
+
+.header .menu {
+    display: none;
+}
+
+.header .item_selected {
+    color: #FFF;
+}
+
+@media (max-width: 500px) {
+    .header {
+        position: relative;
+    }
+    .header .logo {
+        min-width: 150px;
+        justify-content: space-between;
+    }
+    .header nav {
+        top: 0;
+        position: fixed;
+        height: 100vh;
+        right: -100%;
+        width: 100%;
+        background-color: #e6e6e6;
+        padding: 5em;
+        transition: right .3s ease-in-out;
+    }
+    .header nav ul {
+        max-height: 400px;
+        height: 100%;
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: flex-start;
+    }
+    .header nav ul li {
+        font-size: 2em;
+        font-weight: bold;
+    }
+    .header .close {
+        display: block;
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        width: 40px;
+        cursor: pointer;
+    }
+    .header .menu {
+        display: block;
+        position: absolute;
+        top: 0;
+        top: 10px;
+        right: 20px;
+        width: 30px;
+        cursor: pointer;
+    }
+    .header .menu img {
+        width: 100%;
+    }
+    .header .close img {
+        width: 100%;
+    }
+    .header nav.open {
+        right: 0;
+    }
+    .header .item_selected {
+        color: #000;
+    }
+}
