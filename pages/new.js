@@ -3,7 +3,7 @@ import axios from 'axios'
 import { format } from 'date-fns';
 
 export async function getStaticProps() {
-  const res = await axios.get('https://hacker-news.firebaseio.com/v0/topstories.json?print=pretty');
+  const res = await axios.get('https://hacker-news.firebaseio.com/v0/newstories.json?print=pretty');
   const allData = res.data;
 
   const promises = allData.slice(0, 30).map(async function (story) {
@@ -68,14 +68,12 @@ export default function Index ({data}) {
                   </div>
                   <div className={styles.text}>
                     <h2>
-                      <a href={s.url}>{s.title + ` [${s.type}]`}</a>
+                      <a href={s.url}>{s.title}</a>
                     </h2>
                     <div className={styles.subtext}>
                       <span className={styles.points_author}>{s.score} points by {s.by}</span>
                       |
                       <span className={styles.time}>{format(s.time, 'H')} hours</span>
-                      |
-                      <span className={styles.comments}>{s.kids ? `${s.kids.length} comments` : null}</span>
                     </div>
                   </div>
                   

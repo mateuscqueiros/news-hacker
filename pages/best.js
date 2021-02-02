@@ -1,9 +1,9 @@
+import { format } from 'date-fns'
 import styles from '../styles/Home.module.css'
 import axios from 'axios'
-import { format } from 'date-fns';
 
 export async function getStaticProps() {
-  const res = await axios.get('https://hacker-news.firebaseio.com/v0/topstories.json?print=pretty');
+  const res = await axios.get('https://hacker-news.firebaseio.com/v0/beststories.json?print=pretty');
   const allData = res.data;
 
   const promises = allData.slice(0, 30).map(async function (story) {
@@ -25,14 +25,11 @@ export async function getStaticProps() {
     };
   }
 }
- 
 
 export default function Index ({data}) {
 
-  console.log(data[0])
-
   return (
-    <div className={styles.container}>
+    <div id={styles.best} className={styles.container}>
       <header className={styles.header}>
         <div className={styles.wrap_header}>
           <div className={styles.logo}>
@@ -55,6 +52,7 @@ export default function Index ({data}) {
         </div>
       </header>
       <div className={styles.wrapper}>
+        <p>Best stories from {format(new Date(), 'LLLL d, u')} (UTC)</p>
         <ul>
 
           {
@@ -68,14 +66,12 @@ export default function Index ({data}) {
                   </div>
                   <div className={styles.text}>
                     <h2>
-                      <a href={s.url}>{s.title + ` [${s.type}]`}</a>
+                      <a href={s.url}>{s.title}</a>
                     </h2>
                     <div className={styles.subtext}>
                       <span className={styles.points_author}>{s.score} points by {s.by}</span>
                       |
                       <span className={styles.time}>{format(s.time, 'H')} hours</span>
-                      |
-                      <span className={styles.comments}>{s.kids ? `${s.kids.length} comments` : null}</span>
                     </div>
                   </div>
                   
