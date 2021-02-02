@@ -68,7 +68,7 @@ export default function Index ({data}) {
                   </div>
                   <div className={styles.text}>
                     <h2>
-                      <a href={s.url}>{s.title + ` [${s.type}]`}</a>
+                      <a href={s.url}>{s.title}</a>
                     </h2>
                     <div className={styles.subtext}>
                       <span className={styles.points_author}>{s.score} points by {s.by}</span>
